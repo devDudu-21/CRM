@@ -31,7 +31,7 @@ export const customerSchema = z.object({
     .string()
     .min(14, "CNPJ inválido")
     .max(18, "CNPJ inválido")
-    .regex(/^[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}-?[0-9]{2}$/)
+    .regex(/^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/)
     .refine((cnpj) => isValidCNPJ(cnpj), {
       message: "CNPJ inválido",
     }),
@@ -43,7 +43,7 @@ export const customerSchema = z.object({
     estado: z.string(),
     codigoPostal: z.string().refine(
       (codigoPostal) => {
-        const cepRegex = /^\d{5}-\d{3}$/;
+        const cepRegex = /^\d{5}-?\d{3}$/;
         return cepRegex.test(codigoPostal);
       },
       { message: "Código postal inválido" }
@@ -51,7 +51,7 @@ export const customerSchema = z.object({
   }),
   telefone: z.string().refine(
     (telefone) => {
-      const phoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/;
+      const phoneRegex = /^\(?\d{2}\)?\s?\d{5}-?\d{4}$/;
       return phoneRegex.test(telefone);
     },
     { message: "Número de telefone inválido" }

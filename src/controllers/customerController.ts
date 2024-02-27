@@ -1,14 +1,22 @@
+import "dotenv/config";
+
 import { Request, Response } from "express";
 import { customerSchema } from "../validators/customerValidator";
 import { customerRepository } from "../repositories/customerRepository";
-import "dotenv/config";
+import { generateHash, checkPassword } from "../utils/hash";
+import { generateToken } from "../utils/token";
 
 export class CustomerController {
   async createCustomer(req: Request, res: Response) {
     try {
       const validatedData = customerSchema.parse(req.body);
-      const newCustomer = customerRepository.create(validatedData);
-      customerRepository.save(newCustomer);
+      const hashedPassword = await generateHash(validatedData.password);
+
+      const newCustomer = customerRepository.create({
+        ...validatedData,
+        password: hashedPassword,
+      });
+      await customerRepository.save(newCustomer);
       res.status(201).json(newCustomer);
     } catch (error) {
       console.error("Erro ao criar cliente:", error);
@@ -60,6 +68,33 @@ export class CustomerController {
       res.status(200).json({ message: "Cliente deletado com sucesso" });
     } catch (error) {
       console.error("Erro ao deletar cliente:", error);
+      res.status(500).json({ error: error });
+    }
+  }
+
+  async login(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+      const customer = await customerRepository.findOneBy({
+        email: email,
+      });
+      if (!customer) {
+        res.status(401).json({ message: "Credenciais inválidas" });
+        return;
+      }
+      const isPasswordValid = await checkPassword(password, customer.password);
+
+      if (isPasswordValid) {
+        const token = generateToken({
+          customerId: customer.id,
+          email: customer.email,
+        });
+        res.json({ token: token });
+      } else {
+        res.status(401).json({ message: "Credenciais inválidas" });
+      }
+    } catch (error) {
+      console.error("Erro ao fazer login", error);
       res.status(500).json({ error: error });
     }
   }

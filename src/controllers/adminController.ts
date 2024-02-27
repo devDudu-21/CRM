@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { adminRepository } from "../repositories/adminRepository";
 import { generateToken } from "../utils/token";
-import { checkPassword } from "../utils/hash";
+import { checkPassword, generateHash } from "../utils/hash";
+import { adminSchema } from "../validators/adminValidator";
 
 export class AdminController {
   async login(req: Request, res: Response) {
@@ -40,6 +41,23 @@ export class AdminController {
       res.json({ id: adminId, email: admin.email, name: admin.name });
     } catch (error) {
       console.error("Erro ao carregar admin:", error);
+      res.status(500).json({ error: error });
+    }
+  }
+
+  async createAdmin(req: Request, res: Response) {
+    try {
+      const validatedData = adminSchema.parse(req.body);
+      const hashedPassword = await generateHash(validatedData.password);
+
+      const newAdmin = adminRepository.create({
+        ...validatedData,
+        password: hashedPassword,
+      });
+      await adminRepository.save(newAdmin);
+      res.status(201).json(newAdmin);
+    } catch (error) {
+      console.error("Erro ao criar administrador:", error);
       res.status(500).json({ error: error });
     }
   }

@@ -7,6 +7,7 @@ const router = express.Router();
 
 const adminController = new AdminController();
 
+router.post("/create", adminController.createAdmin);
 router.post("/login", adminController.login);
 router.get("/me", authMiddleware, adminController.loadAdminById);
 

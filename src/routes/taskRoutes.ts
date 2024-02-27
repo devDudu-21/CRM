@@ -10,6 +10,12 @@ router.post("/", authMiddleware, taskController.createTask);
 router.get("/", authMiddleware, taskController.getAllTasks);
 router.get("/:id", authMiddleware, taskController.getTaskById);
 router.put("/:id", authMiddleware, taskController.updateTask);
+router.put(
+  "/:id/bind-to-admin",
+  authMiddleware,
+  taskController.bindTaskToAdmin
+);
+
 router.put("/:id/status", authMiddleware, taskController.updateTaskStatus);
 router.delete("/:id", authMiddleware, taskController.deleteTask);
 

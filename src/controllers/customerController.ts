@@ -47,6 +47,20 @@ export class CustomerController {
       res.status(500).json({ error: error });
     }
   }
+  async getCustomerByEmail(req: Request, res: Response) {
+    try {
+      const email = req.query.email as string; // Extrai o email dos parâmetros de consulta
+      const customer = await customerRepository.findOneBy({ email: email }); // Busca o cliente pelo email
+      if (!customer) {
+        res.status(404).json({ message: "Cliente não encontrado" });
+      } else {
+        res.json(customer);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar cliente pelo email:", error);
+      res.status(500).json({ error: error });
+    }
+  }
   async updateCustomer(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { Customer } from "./Customer";
 
@@ -30,6 +31,9 @@ export class Task {
 
   @Column({ type: "timestamp", nullable: true })
   finishedAt: Date;
+
+  @Column({ nullable: true })
+  adminId: number;
 
   @ManyToOne((type) => Customer, (customer) => customer.tasks)
   customer: Customer;

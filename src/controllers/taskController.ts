@@ -6,7 +6,7 @@ import { DeepPartial } from "typeorm";
 export class TaskController {
   async createTask(req: Request, res: Response) {
     try {
-      const { title, description, status } = req.body;
+      const { title, description, status, adminId } = req.body;
 
       const createdAt = new Date();
 
@@ -14,7 +14,8 @@ export class TaskController {
         title,
         description,
         status,
-        createdAt, 
+        createdAt,
+        adminId,
       });
 
       const savedTask = await taskRepository.save(newTask);
@@ -67,6 +68,27 @@ export class TaskController {
     }
   }
 
+  async bindTaskToAdmin(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id);
+      const adminId = req.body.adminId; // Presumindo que o ID do administrador é passado no corpo da solicitação
+
+      const task = await taskRepository.findOneBy({ id: id });
+
+      if (!task) {
+        return res.status(404).json({ message: "Tarefa não encontrada!" });
+      }
+
+      task.adminId = adminId; // Vinculando a tarefa ao administrador especificado
+
+      const updatedTask = await taskRepository.save(task);
+      res.json(updatedTask);
+    } catch (error) {
+      console.error("Erro ao vincular tarefa ao administrador:", error);
+      res.status(400).json({ error: error.message });
+    }
+  }
+
   async updateTaskStatus(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id);
@@ -82,7 +104,6 @@ export class TaskController {
         task.finishedAt = new Date();
       }
 
-    
       task.status = status;
 
       const updatedTask = await taskRepository.save(task);

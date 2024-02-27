@@ -27,4 +27,20 @@ export class AdminController {
       res.status(500).json({ error: error });
     }
   }
+
+  async loadAdminById(req: Request, res: Response) {
+    try {
+      const adminId = req.body.adminId;
+      const admin = await adminRepository.findOneBy({ id: adminId });
+      if (!admin) {
+        res.status(404).json({ message: "Admin não encontrado" });
+        return;
+      }
+
+      res.json({ id: adminId, email: admin.email, name: admin.name });
+    } catch (error) {
+      console.error("Erro ao carregar admin:", error);
+      res.status(500).json({ error: error });
+    }
+  }
 }

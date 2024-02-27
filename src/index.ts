@@ -13,10 +13,5 @@ app.use("/customers", customerRoutes);
 app.use("/tasks", taskRoutes);
 
 app.listen(port, () => {
-  AppDataSource.initialize()
-    .then(() => {
-      console.log("Conexão com o banco de dados estabelecida com sucesso!");
-    })
-    .catch((error) => console.log(error));
   console.log(`Server running on port ${port}`);
 });

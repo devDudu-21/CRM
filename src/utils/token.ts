@@ -5,11 +5,13 @@ const jwtSecret: Secret | undefined = process.env.JWT_SECRET;
 export interface AdminJwtPayload {
   adminId: number;
   email: string;
+  role: string;
 }
 
 export interface CustomerJwtPayload {
   customerId: number;
   email: string;
+  role: string;
 }
 
 export function generateToken(

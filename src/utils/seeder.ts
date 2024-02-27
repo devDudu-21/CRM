@@ -26,6 +26,7 @@ const seeder = async () => {
       name: admin.name,
       email: admin.email,
       password: hashedPassword,
+      role: "admin",
     });
 
     await adminRepository.save(newAdmin);

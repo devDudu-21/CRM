@@ -1,14 +1,14 @@
 import express from "express";
 
 import { AdminController } from "../controllers/adminController";
-import { authMiddleware } from "../middlewares/authMiddleware";
+import { adminMiddleware } from "../middlewares/adminMiddleware";
 
 const router = express.Router();
 
 const adminController = new AdminController();
 
-router.post("/create", adminController.createAdmin);
+router.post("/create", adminMiddleware, adminController.createAdmin);
 router.post("/login", adminController.login);
-router.get("/me", authMiddleware, adminController.loadAdminById);
+router.get("/me", adminMiddleware, adminController.loadAdminById);
 
 export default router;

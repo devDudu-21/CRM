@@ -33,6 +33,9 @@ export class Customer {
   @Column()
   password: string;
 
+  @Column()
+  role: string;
+
   @ManyToOne((type) => Task, (task) => task.customer)
   tasks: Task[];
 }

@@ -15,6 +15,7 @@ export class CustomerController {
       const newCustomer = customerRepository.create({
         ...validatedData,
         password: hashedPassword,
+        role: "customer",
       });
       await customerRepository.save(newCustomer);
       res.status(201).json(newCustomer);
@@ -102,6 +103,7 @@ export class CustomerController {
         const token = generateToken({
           customerId: customer.id,
           email: customer.email,
+          role: "customer",
         });
         res.json({ token: token });
       } else {

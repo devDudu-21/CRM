@@ -46,6 +46,8 @@ export function authMiddleware(
       return res.status(401).json({ message: "Invalid token" });
     }
 
+    
+
     // Continua para o próximo middleware ou rota
     next();
   } catch (error) {

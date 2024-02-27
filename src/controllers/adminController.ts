@@ -18,7 +18,11 @@ export class AdminController {
       const isPasswordValid = await checkPassword(password, admin.password);
 
       if (isPasswordValid) {
-        const token = generateToken({ adminId: admin.id, email: admin.email });
+        const token = generateToken({
+          adminId: admin.id,
+          email: admin.email,
+          role: "admin",
+        });
         res.json({ token: token });
       } else {
         res.status(401).json({ message: "Credenciais inválidas" });
@@ -53,6 +57,7 @@ export class AdminController {
       const newAdmin = adminRepository.create({
         ...validatedData,
         password: hashedPassword,
+        role: "admin",
       });
       await adminRepository.save(newAdmin);
       res.status(201).json(newAdmin);

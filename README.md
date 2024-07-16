@@ -10,7 +10,7 @@ Este é um projeto de um sistema de gerenciamento de relacionamento com clientes
 2. Clone este repositório:
 
    ```bash
-   git clone https://github.com/seu_usuario/crm.git
+   git clone https://github.com/devDudu-21/crm.git
    ```
 
 3. Na raiz do projeto, execute `npm install` para instalar as dependências.
@@ -69,5 +69,3 @@ Este é um projeto de um sistema de gerenciamento de relacionamento com clientes
 ## Licença
 
 Este projeto está licenciado sob a Licença ISC.
-
-Lembre-se de substituir `seu_usuario` pelo seu nome de usuário do GitHub. Se precisar de mais alguma coisa, não hesite em me avisar!
